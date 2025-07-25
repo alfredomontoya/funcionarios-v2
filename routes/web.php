@@ -30,7 +30,7 @@ Route::resource('configuracion', ConfiguracionController::class);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified'])->get('/funcionarios', function () {
-    return Inertia::render('funcionario/FuncionarioIndex');
+    return Inertia::render('funcionario/FuncionarioSearchPage');
 });
 
 
