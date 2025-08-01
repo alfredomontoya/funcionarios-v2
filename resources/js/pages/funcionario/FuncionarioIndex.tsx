@@ -23,8 +23,9 @@ export default function FuncionarioIndex() {
     const fetchFuncionarios = async () => {
       try {
         const { data } = await axios.get('/api/funcionario'); // Asegúrate que esta ruta devuelva los datos
+        console.log('FUNCIONARIOS');
         setFuncionarios(data.funcionarios);
-        // console.log(data.funcionarios);
+        console.log(data.funcionarios);
         funcionarios.map(f => {
           console.log(f);
         })

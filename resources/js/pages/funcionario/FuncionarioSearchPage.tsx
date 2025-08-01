@@ -21,10 +21,10 @@ const SearchPage: React.FC = () => {
   return (
     <AppLayout>
       <Head title="Funcionarios" />
-      {/* <div className={`min-h-screen flex flex-col items-center ${submitted ? 'pt-10' : 'justify-center'}`}>
+      <div className={`min-h-screen flex flex-col items-center ${submitted ? 'pt-10' : 'justify-center'}`}>
         <SearchForm query={query} onChange={handleChange} onSubmit={handleSubmit} />
         {submitted && <SearchResults query={query} />}
-      </div> */}
+      </div>
     </AppLayout>
   );
 };

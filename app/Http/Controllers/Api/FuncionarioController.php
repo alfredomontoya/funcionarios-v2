@@ -14,18 +14,38 @@ class FuncionarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
         $gestiones = Gestion::activas();
-        // dd($gestiones);
+
         try {
-            $funcionarios = Funcionario::orderBy('id', 'desc')->whereIn('gestion_id', $gestiones->pluck('id'))->get();
+            $query = Funcionario::orderBy('id', 'desc')
+                ->whereIn('gestion_id', $gestiones->pluck('id'));
+            // $query = Funcionario::orderBy('id', 'desc');
+
+            // Si se envía un parámetro de búsqueda
+            if ($request->filled('search')) {
+
+                $search = $request->input('search');
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('ci', 'LIKE', "%{$search}%")
+                    ->orWhere('nombres', 'LIKE', "%{$search}%")
+                    ->orWhere('apellidos', 'LIKE', "%{$search}%");
+                });
+
+            }
+
+            $funcionarios = $query->get();
+
+            // dd($funcionarios);
+
             return response()->json([
                 'status' => true,
                 'count' => $funcionarios->count(),
                 'funcionarios' => $funcionarios
             ], 200);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -33,6 +53,7 @@ class FuncionarioController extends Controller
             ], 500);
         }
     }
+
 
     public function search($search) {
         $gestiones = Gestion::activas();

@@ -19,7 +19,10 @@ class FuncionarioController extends Controller
     // }
 
     public function index(Request $request){
-        return Funcionario::all();
+        // $funcionario = Funcionario::all();
+        // dd($funcionario);
+        return "hola";
+        // return Funcionario::all();
     }
 
 

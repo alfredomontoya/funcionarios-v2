@@ -23,7 +23,7 @@ class CreateFuncionariosTable extends Migration
             $table->string('edificio', 512)->nullable();
             $table->string('tipo', 32)->nullable();
             $table->string('responsable', 512)->default('nd');
-            $table->string('telresponsable', 16)->default('');
+            $table->string('telresponsable', 32)->default('');
             $table->tinyInteger('estado')->default(1);
             $table->tinyInteger('entregado')->default(0);
             $table->timestamps();
