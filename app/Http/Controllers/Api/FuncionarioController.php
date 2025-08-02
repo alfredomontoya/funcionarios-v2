@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bitacora;
 use App\Models\Funcionario;
 use App\Models\Gestion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FuncionarioController extends Controller
 {
@@ -17,6 +19,7 @@ class FuncionarioController extends Controller
     public function index(Request $request)
     {
         $gestiones = Gestion::activas();
+        dd(Auth::user());
 
         try {
             $query = Funcionario::orderBy('id', 'desc')
@@ -28,11 +31,23 @@ class FuncionarioController extends Controller
 
                 $search = $request->input('search');
 
-                $query->where(function ($q) use ($search) {
-                    $q->where('ci', 'LIKE', "%{$search}%")
-                    ->orWhere('nombres', 'LIKE', "%{$search}%")
-                    ->orWhere('apellidos', 'LIKE', "%{$search}%");
-                });
+                if (!empty($search)){
+                    $query->where(function ($q) use ($search) {
+                        $q->where('ci', 'LIKE', "%{$search}%")
+                        ->orWhere('nombres', 'LIKE', "%{$search}%")
+                        ->orWhere('apellidos', 'LIKE', "%{$search}%");
+                    });
+
+                    // dd(Auth::user());
+
+                    // Bitacora::create([
+                    //     'user_id' => Auth::id(),
+                    //     'busqueda' => $search,
+                    //     'hostname' => gethostbyaddr($request->ip())
+                    // ]);
+                }
+
+
 
             }
 
@@ -55,26 +70,26 @@ class FuncionarioController extends Controller
     }
 
 
-    public function search($search) {
-        $gestiones = Gestion::activas();
-        // dd($gestiones);
-        try {
-            $funcionarios = Funcionario::orderBy('id', 'desc')
-                    ->whereIn('gestion_id', $gestiones->pluck('id'))
-                    ->where('ci', $search)
-                    ->get();
-            return response()->json([
-                'status' => true,
-                'count' => $funcionarios->count(),
-                'funcionarios' => $funcionarios
-            ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
+    // public function search($search) {
+    //     $gestiones = Gestion::activas();
+    //     // dd($gestiones);
+    //     try {
+    //         $funcionarios = Funcionario::orderBy('id', 'desc')
+    //                 ->whereIn('gestion_id', $gestiones->pluck('id'))
+    //                 ->where('ci', $search)
+    //                 ->get();
+    //         return response()->json([
+    //             'status' => true,
+    //             'count' => $funcionarios->count(),
+    //             'funcionarios' => $funcionarios
+    //         ], 200);
+    //     } catch (\Throwable $th) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => $th->getMessage()
+    //         ], 500);
+    //     }
+    // }
 
     /**
      * Store a newly created resource in storage.

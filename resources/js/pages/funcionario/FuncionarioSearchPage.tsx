@@ -8,10 +8,14 @@ import { Head } from '@inertiajs/react';
 const SearchPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [submittedQuery, setSubmittedQuery] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (query.trim() !== '') {
+        setSubmitted(true)
+        setSubmittedQuery(query.trim());
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,8 +26,8 @@ const SearchPage: React.FC = () => {
     <AppLayout>
       <Head title="Funcionarios" />
       <div className={`min-h-screen flex flex-col items-center ${submitted ? 'pt-10' : 'justify-center'}`}>
-        <SearchForm query={query} onChange={handleChange} onSubmit={handleSubmit} />
-        {submitted && <SearchResults query={query} />}
+        <SearchForm query={query} onChange={handleChange} onSubmit={handleSubmit} submitted={submitted} />
+        {submitted && <SearchResults query={submittedQuery} />}
       </div>
     </AppLayout>
   );
